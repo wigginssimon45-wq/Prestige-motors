@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestige Motors Zambia</title>
+  <style>
+    /* CSS STYLES */
+
+    /* Color Palette and Global Styles */
+:root {
+      --black: #0a0a0a;
+      --white: #f5f5f5;
+      --blue: #007bff;
+      --gold: #d4af37;
+      --dark-grey: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont,"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header and Navigation */
+    .header {
+      background-color: var(--dark-grey);
+      padding: 15px 0;
+      border-bottom: 2px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .lang-switcher button {
+      background: none;
+      border: 1px solid var(--blue);
+      color: var(--white);
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .lang-switcher button:hover, .lang-switcher button.active {
+      background-color: var(--blue);
+      color: var(--white);
+    }
+
+    /* Main Welcome Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .hero h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      color: #aaa;
+    }
+
+    /* Car Listings Grid */
+    #car-listings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 40px 0;
+    }
+
+    .car-card {
+      background-color: var(--dark-grey);
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .car-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
+    }
+
+    .car-card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .car-card-body {
+      padding: 20px;
+    }
+
+    .car-card-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .car-card-price {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: var(--gold);
+      margin-bottom: 15px;
+    }
+
+    .car-card-specs {
+      display: flex;
+      justify-content: space-between;
+      color: #aaa;
+      font-size: 0.9em;
+    }
+
+    /* Modal for Car Details */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: var(--dark-grey);
+      margin: auto;
+      padding: 20px;
+      border: 1px solid var(--gold);
+      width: 90%;
+      max-width: 800px;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .close-button {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Image Slider in Modal */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      cursor: grab;
+    }
+
+    .slider img {
+      width: 100%;
+      flex-shrink: 0;
+      object-fit: cover;
+      height: 400px;
+    }
+
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .slider-nav button {
+      background-color: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      font-size: 2em;
+      padding: 5px 15px;
+      cursor: pointer;
+    }
+
+    .modal-details h2 {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .modal-details p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      background-color: var(--blue);
+      color: var(--white);
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .contact-btn:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="container navbar">
+      <a href="#" class="logo">Prestige Motors</a>
+      <div class="lang-switcher">
+        <button id="lang-en" class="active">EN</button>
+        <button id="lang-fr">FR</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 data-translate-key="welcomeTitle">Find Your Next Luxury Ride</h1>
+      <p data-translate-key="welcomeSubtitle">
+        The finest selection of vehicles in Zambia
+      </p>
+    </section>
+
+    <section id="car-listings">
+    </section>
+  </main>
+
+  <div id="car-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div id="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JAVASCRIPT LOGIC
+
+    // =================================================================
+    // == EDIT YOUR INVENTORY AND TEXT HERE ==
+    // =================================================================
+
+    // Car Inventory - Easy to update!
+    const cars = [{
+      id: 1,
+      name: "Toyota Hilux GD-6",
+      price: "ZMW 1,200,000",
+      year: 2023,
+      mileage: "15,000 km",
+      transmission: "Automatic",
+      images: [
+        "https://via.placeholder.com/800x400/0000FF/FFFFFF?text=Hilux+Front",
+        "https://via.placeholder.com/800x400/0000FF/FFFFFF?text=Hilux+Side",
+        "https://via.placeholder.com/800x400/0000FF/FFFFFF?text=Hilux+Interior"
+      ],
+      description: {
+        en: "A rugged and reliable 4x4, perfect for Zambian roads. Low mileage and in excellent condition.",
+        fr: "Un 4x4 robuste et fiable, parfait pour les routes zambiennes. Faible kilométrage et en excellent état."
+      }
+    },
+      {
+        id: 2,
+        name: "Mercedes-Benz C200",
+        price: "ZMW 950,000",
+        year: 2021,
+        mileage: "25,000 km",
+        transmission: "Automatic",
+        images: [
+          "https://via.placeholder.com/800x400/D4AF37/000000?text=C200+Front",
+          "https://via.placeholder.com/800x400/D4AF37/000000?text=C200+Rear",
+          "https://via.placeholder.com/800x400/D4AF37/000000?text=C200+Interior"
+        ],
+        description: {
+          en: "Experience pure luxury and performance with the C-Class. Features a premium sound system and leather interior.",
+          fr: "Découvrez le luxe pur et la performance avec la Classe C. Comprend un système audio premium et un intérieur en cuir."
+        }
+      },
+      {
+        id: 3,
+        name: "Ford Ranger Raptor",
+        price: "ZMW 1,500,000",
+        year: 2024,
+        mileage: "5,000 km",
+        transmission: "Automatic",
+        images: [
+          "https://via.placeholder.com/800x400/000000/FFFFFF?text=Raptor+Front",
+          "https://via.placeholder.com/800x400/000000/FFFFFF?text=Raptor+Action"
+        ],
+        description: {
+          en: "The ultimate off-road beast. Barely used, this Raptor is ready for any adventure you can throw at it.",
+          fr: "La bête tout-terrain ultime. À peine utilisé, ce Raptor est prêt pour toutes les aventures que vous lui proposerez."
+        }
+      }];
+
+    // Website Text Translations
+    const translations = {
+      en: {
+        welcomeTitle: "Find Your Next Luxury Ride",
+        welcomeSubtitle: "The finest selection of vehicles in Zambia",
+        priceLabel: "Price",
+        yearLabel: "Year",
+        mileageLabel: "Mileage",
+        transmissionLabel: "Transmission",
+        descriptionLabel: "Description",
+        contactUs: "Contact Us on WhatsApp",
+        viewDetails: "View Details",
+        // A placeholder, used in logic
+      },
+      fr: {
+        welcomeTitle: "Trouvez Votre Prochain Véhicule de Luxe",
+        welcomeSubtitle: "La meilleure sélection de véhicules en Zambie",
+        priceLabel: "Prix",
+        yearLabel: "Année",
+        mileageLabel: "Kilométrage",
+        transmissionLabel: "Transmission",
+        descriptionLabel: "La description",
+        contactUs: "Contactez-nous sur WhatsApp",
+        viewDetails: "Voir les détails",
+        // A placeholder, used in logic
+      }
+    };
+
+    // =================================================================
+    // == WEBSITE FUNCTIONALITY (No need to edit below this line) ==
+    // =================================================================
+
+    let currentLanguage = 'en';
+
+    const carListingsContainer = document.getElementById('car-listings');
+    const modal = document.getElementById('car-modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalButton = document.querySelector('.close-button');
+
+    // --- Language Switcher ---
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll('[data-translate-key]').forEach(el => {
+        const key = el.dataset.translateKey;
+        el.textContent = translations[lang][key];
+      });
+
+      document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+      document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
+
+      renderCarListings(); // Re-render listings with new language
+    }
+
+    document.getElementById('lang-en').addEventListener('click', () => changeLanguage('en'));
+    document.getElementById('lang-fr').addEventListener('click', () => changeLanguage('fr'));
+
+    // --- Render Car Listings ---
+    function renderCarListings() {
+      carListingsContainer.innerHTML = '';
+      cars.forEach(car => {
+        const carCard = document.createElement('div');
+        carCard.className = 'car-card';
+        carCard.dataset.carId = car.id;
+
+        carCard.innerHTML = `
+        <img src="${car.images[0]}" alt="${car.name}" class="car-card-img">
+        <div class="car-card-body">
+        <h3 class="car-card-title">${car.name}</h3>
+        <p class="car-card-price">${car.price}</p>
+        <div class="car-card-specs">
+        <span>${car.year}</span>
+        <span>${car.mileage}</span>
+        <span>${car.transmission}</span>
+        </div>
+        </div>
+        `;
+        carListingsContainer.appendChild(carCard);
+      });
+    }
+
+    // --- Modal and Slider Logic ---
+    let currentImageIndex = 0;
+    let touchStartX = 0;
+
+    function showImage(index, slider) {
+      const totalImages = slider.children.length;
+      if (index >= totalImages) index = 0;
+      if (index < 0) index = totalImages - 1;
+      currentImageIndex = index;
+      slider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+    }
+
+    function openModal(car) {
+      currentImageIndex = 0;
+      modalBody.innerHTML = `
+      <div class="slider-container">
+      <div class="slider">
+      ${car.images.map(img => `<img src="${img}" alt="${car.name}">`).join('')}
+      </div>
+      <div class="slider-nav">
+      <button class="prev">&lt;</button>
+      <button class="next">&gt;</button>
+      </div>
+      </div>
+      <div class="modal-details">
+      <h2>${car.name}</h2>
+      <p><strong>${translations[currentLanguage].priceLabel}:</strong> ${car.price}</p>
+      <p><strong>${translations[currentLanguage].yearLabel}:</strong> ${car.year}</p>
+      <p><strong>${translations[currentLanguage].mileageLabel}:</strong> ${car.mileage}</p>
+      <p><strong>${translations[currentLanguage].transmissionLabel}:</strong> ${car.transmission}</p>
+      <h3>${translations[currentLanguage].descriptionLabel}</h3>
+      <p>${car.description[currentLanguage]}</p>
+      <a href="https://wa.me/260977000000?text=I'm%20interested%20in%20the%20${encodeURIComponent(car.name)}" class="contact-btn" target="_blank">
+      ${translations[currentLanguage].contactUs}
+      </a>
+      </div>
+      `;
+      modal.style.display = 'flex';
+
+      // Slider functionality
+      const slider = modalBody.querySelector('.slider');
+      const prevBtn = modalBody.querySelector('.prev');
+      const nextBtn = modalBody.querySelector('.next');
+
+      prevBtn.addEventListener('click', () => showImage(currentImageIndex - 1, slider));
+      nextBtn.addEventListener('click', () => showImage(currentImageIndex + 1, slider));
+
+      // Swipe functionality for touch devices
+      slider.addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+        slider.style.transition = 'none'; // Disable transition during swipe
+      });
+
+      slider.addEventListener('touchmove', e => {
+        const touchCurrentX = e.touches[0].clientX;
+        const diff = touchStartX - touchCurrentX;
+        slider.style.transform = `translateX(calc(-${currentImageIndex * 100}% - ${diff}px))`;
+      });
+
+      slider.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].clientX;
+        slider.style.transition = 'transform 0.5s ease-in-out'; // Re-enable transition
+        if (touchStartX - touchEndX > 50) {
+          // Swiped left
+          showImage(currentImageIndex + 1, slider);
+        } else if (touchStartX - touchEndX < -50) {
+          // Swiped right
+          showImage(currentImageIndex - 1, slider);
+        } else {
+          // Not a significant swipe, snap back
+          showImage(currentImageIndex, slider);
+        }
+      });
+    }
+
+    closeModalButton.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    carListingsContainer.addEventListener('click', (event) => {
+      const card = event.target.closest('.car-card');
+      if (card) {
+        const carId = parseInt(card.dataset.carId);
+        const carData = cars.find(c => c.id === carId);
+        openModal(carData);
+      }
+    });
+
+    // --- Initial Load ---
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCarListings();
+    });
+
+  </script>
+</body>
+</html>
